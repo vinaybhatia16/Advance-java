@@ -12,17 +12,30 @@
 
 	<%
 	List<User1Bean> list = (List) request.getAttribute("list");
+	int pageNo = (int) request.getAttribute("pageNo");
 	Iterator<User1Bean> it = list.iterator();
 	%>
 
 	<%@ include file="Header.jsp"%>
-	<div align="center">
 
-		<h1><u>User List</u></h1>
 
-		<form action="UserListCtl" method="post">
+	<h1 align="center" style="color: darkblue">
+		<u>User List</u>
+	</h1>
 
-			<table width="90%" border="1px">
+	<form action="UserListCtl" method="post">
+
+		<%
+		if (list.size() == 0) {
+		%>
+		<h1 style="color: red">Record Not found</h1>
+		<%
+		} else {
+		%>
+		<input type="hidden" name="pageNo" value="<%=pageNo%>">
+
+		<div align="center">
+			<table width="100%" border="1px">
 				<tr style="background-color: skyblue">
 					<th>Id</th>
 					<th>First Name</th>
@@ -37,8 +50,7 @@
 					User1Bean bean = it.next();
 				%>
 
-				<tr align="center" style="background-color: lightgrey">
-			
+				<tr align="center" style="background-color: #D3D3D3;">
 					<td><%=bean.getId()%></td>
 					<td><%=bean.getFirstName()%></td>
 					<td><%=bean.getLastName()%></td>
@@ -50,9 +62,22 @@
 				}
 				%>
 			</table>
+		</div>
+		<div>
+			<table width="100%">
+				<tr>
+					<td><input type="submit" name="operation"
+						<%=pageNo == 1 ? "disabled" : ""%> value="previous"></td>
+					<td align="right"><input type="submit" name="operation"
+						<%=list.size() < 10 ? "disabled" : ""%> value="next"></td>
+				</tr>
+			</table>
+		</div>
+		<%
+		}
+		%>
+	</form>
 
-		</form>
-	</div>
 	<%@ include file="Footer.jsp"%>
 </body>
 </html>
